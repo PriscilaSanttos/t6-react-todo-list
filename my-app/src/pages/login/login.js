@@ -1,6 +1,7 @@
 import React from "react"
 import Form from "../../components/form"
 import Container from "../../components/container"
+import {setUser} from "../../infra/local-storage"
 
 // function Login(){
 
@@ -29,9 +30,7 @@ import Container from "../../components/container"
 class Login extends React.Component{
 
     constructor(){
-
         super()
-
         this.state= { disabled: true}
         this.email = React.createRef()
         this.password = React.createRef()
@@ -51,12 +50,27 @@ class Login extends React.Component{
 
     }
 
+    handleSubmit = (e) => {
+        e.preventDefault()
+       
+        const inputEmail= this.email.current
+        const inputPassword = this.password.current
+        const user = {
+
+            email : inputEmail.getValue(),
+            password : inputPassword.getValue()
+        }
+
+        setUser(user)
+        this.props.history.push("/")
+    }
+
     render(){
         return(
 
             <Container>
 
-            <Form title="login" text="Entre com seu email e senha">
+            <Form title="login" text="Entre com seu email e senha" onSubmit={this.handleSubmit}>
            
              <Form.Label htmlFor="email">Email</Form.Label>
              <Form.Input ref={this.email} id="email" type="email" onChange={this.onDisableButton} required/>

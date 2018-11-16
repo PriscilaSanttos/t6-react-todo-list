@@ -8,3 +8,9 @@ storiesOf("Components/Form/Button", module)
         <Button>Children here</Button>
     ))
 
+    .add("with disabled", () =>(
+       
+        <Button disabled>Children here </Button>
+
+    ))
+
