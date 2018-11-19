@@ -1,6 +1,8 @@
 import React from "react"
 import Form from "../../components/form"
 import Container from "../../components/container"
+import { signupUser } from "../../apis/signup.api"
+import { setUser } from "../../infra/local-storage"
 
 
 class Signup extends React.Component{
@@ -19,12 +21,12 @@ class Signup extends React.Component{
     onDisableButton = () => {
 
         console.log("this.email =>", this.email.current)
-        const InputName = this.name.current
+        const inputName = this.name.current
         const inputEmail = this.email.current
-        const InputPhone = this.phone.current
+        const inputPhone = this.phone.current
         const inputPassword = this.password.current
 
-        if ( InputName.hasError () || inputEmail.hasError () || InputPhone.hasError () || inputPassword.hasError () ){
+        if ( inputName.hasError () || inputEmail.hasError () || inputPhone.hasError () || inputPassword.hasError () ){
             this.setState({ disabled : true })
         }else{
             this.setState({ disabled : false })
@@ -32,12 +34,41 @@ class Signup extends React.Component{
 
     }
 
+    handleSubmit = (e) => {
+        e.preventDefault()
+
+        const inputName = this.name.current
+        const inputEmail = this.email.current
+        const InputPhone = this.phone.current
+        const inputPassword = this.password.current
+        const user = {
+
+            email: inputEmail.getValue(),
+            password: inputPassword.getValue(),
+            name: inputName.getValue(),
+            phone: InputPhone.getValue()
+
+        }
+
+        signupUser(user)
+            .then((response) => {
+
+                setUser({ email : user.email})
+                this.props.history.push("/")
+
+            })
+            .catch((error) => {
+
+            })
+    }
+
+
     render(){
 
         return(
 
             <Container>
-                <Form title="Signup" text="Cadastre-se">
+                <Form title="Signup" text="Cadastre-se" onSubmit={this.handleSubmit}>
                     <Form.Label htmlFor="name">Nome</Form.Label>
                     <Form.Input ref={this.name} id="name" type="text" onChange={this.onDisableButton} />
                     <Form.Label htmlFor="email">Email</Form.Label>
