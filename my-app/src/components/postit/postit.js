@@ -7,9 +7,9 @@ class Postit extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            id: 0,
-            title: "",
-            text: "",
+            id: this.props.id ? this.props.id : 0,
+            title:this.props.title ? this.props.title : "",
+            text: this.props.text ? this.props.desc : "",
             editing : false
         }
     }
