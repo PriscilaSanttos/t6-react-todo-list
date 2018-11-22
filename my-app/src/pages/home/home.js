@@ -36,10 +36,13 @@ class Home extends React.Component{
     }
     render (){
 
-        if(getUser()){
+        const user = this.props.user ? this.props.user : getUser()
+
+        if(user){
             return (
             <div className="home">
-            {this.state.postits.map((item, index) =>(<Postit id={item.id} title={item.title} text={item.desc}/>))}
+            <Postit updatePostits={this.getPostits} />
+            {this.state.postits.map((item, index) =>(<Postit key={item._id} id={item._id} title={item.title} text={item.desc} color={item.color} updatePostits={this.getPostits}/>))}
             </div>
             )
         }else{

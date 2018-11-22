@@ -55,3 +55,13 @@
         margin-right: 5%;
     }
 }
+
+.postit__color {
+    border-radius: 100%;
+    background-color: transparent;
+    border: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: block;
+    margin-left: auto;
+}

@@ -1,7 +1,7 @@
 import React from "react"
 import Form from "../form"
 import "./postit.css"
-import { createPostit} from "../../apis/postit.api";
+import { createPostit, deletePostit, updatePostitApi} from "../../apis/postit.api";
 
 class Postit extends React.Component{
     constructor(props){
@@ -9,8 +9,9 @@ class Postit extends React.Component{
         this.state = {
             id: this.props.id ? this.props.id : 0,
             title:this.props.title ? this.props.title : "",
-            text: this.props.text ? this.props.desc : "",
-            editing : false
+            text: this.props.text ? this.props.text : "",
+            editing : false,
+            color: this.props.color ? this.props.color : "#ECDDF3"
         }
     }
     handlePostitClick = () => {
@@ -18,26 +19,66 @@ class Postit extends React.Component{
             editing : true
         })
     }
-    handlePostitRemove = () => {
+    handlePostitRemove = (e) => {
+        e.stopPropagation()
 
+        const id = this.state.id
+
+        deletePostit(id)
+        .then((response) => {
+            this.props.updatePostits()
+        })
+        .catch((error) =>{
+            console.log(error)
+        })
     }
 
     handlePostitSubmit = (e) => {
         e.preventDefault()
 
-        const postit =  {
+        if (this.state.id){
 
-            title: this.state.title,
-            text: this.state.text
+            const postit =  {
+
+                id: this.state.id,
+                title: this.state.title,
+                text: this.state.text,
+                color: this.state.color
+            }
+
+            updatePostitApi(postit)
+            .then((response) => {
+             this.setState({
+                 editing : false
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+
+        }else{
+            const postit ={
+                title: this.state.title,
+                text: this.state.text,
+                color: this.state.color
+            }
+            createPostit(postit)
+            .then((response) => {
+                this.props.updatePostits()
+                this.setState({
+                    id: "",
+                    title: "",
+                    text: "",
+                    color: "#ECDDF3",
+                    editing : false
+                })
+    
+            })
+            .catch((error) => {
+                console.log(error)
+            })
         }
-
-        createPostit(postit)
-        .then((response) => {
-
-        })
-        .catch((error) => {
-
-        })
+       
     }
 
     setTitle =(e) => {
@@ -53,18 +94,24 @@ class Postit extends React.Component{
         })
     }
 
+    setColor = (e) =>{
+
+    this.setState({
+        color : e.target.value
+    })
+    }
 
     render () {
         return (
-            <div onClick={this.handlePostitClick} className="postit">
-
+            <div onClick={this.handlePostitClick} className="postit" style={{background : this.state.color}}>
+            <input className="postit__color" type="color" onChange={this.setColor} /> 
             <Form onSubmit={this.handlePostitSubmit}>
-                {this.state.editing && (<button className="postit__button-remove"> X </button>)}
+                {this.state.editing && (<button type="button" onClick={this.handlePostitRemove} className="postit__button-remove"> X </button>)}
 
             <input type="text" className="postit__title" placeholder="Título" value={this.state.title} onChange={this.setTitle}/>
             <textarea className="postit__text" placeholder="Digite o seu texto" name="text" rows="5" value={this.state.text} onChange={this.setText}/>
 
-            {this.state.editing && (<button onClick={this.handlePostitRemove} className="postit__button-completed">Concluído</button>)}
+            {this.state.editing && (<button className="postit__button-completed">Concluído</button>)}
     
             </Form>
 
