@@ -5,16 +5,22 @@ import { getUser } from "../../../infra/local-storage";
 
 
 class Menu extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = { open: false}
-        this.user = getUser ()
     }
 
     handleOpenOrClose = () => {
         this.setState ({open : !this.state.open})
         }
-    
+    handleLoginOrLogout = (e) => {
+        e.preventDefault()
+        if(this.props.user){
+            localStorage.clear()
+        }
+        this.props.history.push("/login")
+    }
+
     render() {
 
     console.log("hello render")
@@ -41,8 +47,8 @@ class Menu extends React.Component {
                     </li>
 
                     <li> 
-                    <a>  
-                    { this.user ? "Sair" : "Login" } </a>
+                    <a onClick={this.handleLoginOrLogout}>  
+                    { this.props.user ? "Sair" : "Login" } </a>
                     </li>
                 </ul>
             </div>

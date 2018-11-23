@@ -5,7 +5,7 @@ import logo from "./logo-reprograma.png"
 import "./navbar.css"
 
 
-const Navbar = () => (
+const Navbar = (props) => (
 
     <nav className="navbar">
 
@@ -13,7 +13,7 @@ const Navbar = () => (
     <img className="navbar__logo" src={logo} alt="Reprograma"/>
     </Link>
 
-    <Menu/>
+    <Menu user={props.user} history={props.history}/>
     </nav>
 )
 

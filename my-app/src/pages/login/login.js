@@ -30,8 +30,8 @@ import { loginUser } from "../../apis/login.api"
 
 class Login extends React.Component {
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = { disabled: true }
         this.email = React.createRef()
         this.password = React.createRef()
@@ -70,6 +70,8 @@ class Login extends React.Component {
 
             })
             .catch((error) => {
+                console.log(this.props)
+                this.props.showAlert(error.response.data.msg)
 
             })
     }
